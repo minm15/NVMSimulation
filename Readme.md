@@ -5,14 +5,10 @@ This repository is **extended from** the original project:
 
 It integrates **gem5** and **NVMain** for NVM-related simulation experiments, with additional modifications for specific use cases.
 
----
-
 ## Prerequisites
 
 Before building this project, please follow the gem5 official guide to install all required dependencies:  
 [https://www.gem5.org/documentation/general_docs/building](https://www.gem5.org/documentation/general_docs/building)  
-
----
 
 ## Build Instructions
 
