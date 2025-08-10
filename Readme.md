@@ -10,6 +10,13 @@ It integrates **gem5** and **NVMain** for NVM-related simulation experiments, wi
 Before building this project, please follow the gem5 official guide to install all required dependencies:  
 [https://www.gem5.org/documentation/general_docs/building](https://www.gem5.org/documentation/general_docs/building)  
 
+## Setup
+After cloning the repository, obtain the submodule by the following command
+```bash
+git submodule init
+git submodule update
+```
+
 ## Build Instructions
 
 Note that the original project provides the choice to select the additional function for compute-in-memory functionality by change
