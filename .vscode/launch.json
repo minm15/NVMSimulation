@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: hello-world",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/simulator/gem5/hello-world.py",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/simulator/gem5/src/python"
+            }
+        }
+    ]
+}
