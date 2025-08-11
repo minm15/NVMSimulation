@@ -23,16 +23,12 @@ Note that the original project provides the choice to select the additional func
 the example script 
 
 ```bash
-PYTHON_CONFIG=/usr/bin/python3.10-config \
-LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
 python3 `which scons` -j 8 EXTRAS=../nvmain ./build/ARM/gem5.fast
 ```
 
 to
 
 ```bash
-PYTHON_CONFIG=/usr/bin/python3.10-config \
-LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH \
 python3 `which scons` CDNCcim=1 -j 8 EXTRAS=../nvmain ./build/ARM/gem5.fast
 ```
 
