@@ -10,6 +10,7 @@ KDTREE_SOURCE="$HOME/nas/homes/kaiii_data/export_gem5/2013-01-10"
 IVF_TARGET="$EXPORT_ROOT/ivf_matching/2013-01-10"
 KDTREE_TARGET="$EXPORT_ROOT/kdtree_matching/2013-01-10"
 TESTDATA_TARGET="$EXPORT_ROOT/test_data"
+VERIFY_SOURCE="$GEM5_DIR/tests/test-progs/ivf_matching/test"
 
 prepare_dataset_dir() {
     local source_dir="$1"
@@ -55,6 +56,13 @@ echo "Preparing local dataset directories..."
 mkdir -p "$EXPORT_ROOT/ivf_matching" "$EXPORT_ROOT/kdtree_matching" "$TESTDATA_TARGET"
 prepare_dataset_dir "$IVF_SOURCE" "$IVF_TARGET" "ivf_matching"
 prepare_dataset_dir "$KDTREE_SOURCE" "$KDTREE_TARGET" "kdtree_matching"
+if [ -d "$VERIFY_SOURCE" ]; then
+    echo "Syncing verifier test data from $VERIFY_SOURCE"
+    mkdir -p "$TESTDATA_TARGET"
+    cp -a "$VERIFY_SOURCE"/. "$TESTDATA_TARGET"/
+else
+    echo "Warning: verifier test data source not found at $VERIFY_SOURCE" >&2
+fi
 
 echo "Building gem5.fast with CDNCcim enabled..."
 cd "$GEM5_DIR"

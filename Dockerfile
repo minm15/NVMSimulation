@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     python3-tk \
     clang-format-15 \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-15 150 \
