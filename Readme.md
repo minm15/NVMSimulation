@@ -42,3 +42,14 @@ After successful compilation, you can test the build using a simple Hello World 
 ```bash
 ./build/ARM/gem5.fast hello-world.py
 ```
+
+## Build With Docker
+You can also build the project inside Docker using the provided [`Dockerfile`](Dockerfile). Run the following command from the repository root so the full git metadata is available during the image build:
+```bash
+docker build -t nvmsimulation .
+```
+
+After the image is built, start an interactive shell in the container with:
+```bash
+docker run --rm -it nvmsimulation
+```
