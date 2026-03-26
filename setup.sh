@@ -28,6 +28,45 @@ prepare_dataset_dir() {
     fi
 }
 
+get_pinned_submodule_commit() {
+    local submodule_path="$1"
+
+    git -C "$ROOT_DIR" ls-tree HEAD "$submodule_path" | awk '{print $3}'
+}
+
+ensure_submodule_checkout() {
+    local submodule_path="$1"
+    local submodule_dir="$ROOT_DIR/$submodule_path"
+    local pinned_commit=""
+    local current_commit=""
+
+    pinned_commit="$(get_pinned_submodule_commit "$submodule_path")"
+    if [ -z "$pinned_commit" ]; then
+        echo "Error: unable to resolve pinned commit for submodule $submodule_path" >&2
+        exit 1
+    fi
+
+    if git -C "$submodule_dir" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+        current_commit="$(git -C "$submodule_dir" rev-parse HEAD)"
+        if [ "$current_commit" = "$pinned_commit" ]; then
+            echo "Submodule $submodule_path already at pinned commit $pinned_commit"
+            return
+        fi
+
+        if [ -n "$(git -C "$submodule_dir" status --porcelain)" ]; then
+            echo "Warning: $submodule_path has local changes; keeping current checkout at $current_commit instead of forcing pinned commit $pinned_commit" >&2
+            return
+        fi
+
+        echo "Updating $submodule_path to pinned commit $pinned_commit"
+        git -C "$ROOT_DIR" submodule update -- "$submodule_path"
+        return
+    fi
+
+    echo "Initializing $submodule_path at pinned commit $pinned_commit"
+    git -C "$ROOT_DIR" submodule update --init -- "$submodule_path"
+}
+
 if ! command -v scons >/dev/null 2>&1; then
     echo "Error: scons is not installed or not in PATH." >&2
     exit 1
@@ -40,17 +79,9 @@ fi
 
 echo "Initializing git submodules..."
 git -C "$ROOT_DIR" submodule init
-git -C "$ROOT_DIR" submodule update
-
-echo "Checking out gem5 final branch..."
-if git -C "$GEM5_DIR" show-ref --verify --quiet refs/heads/final; then
-    git -C "$GEM5_DIR" checkout final
-elif git -C "$GEM5_DIR" show-ref --verify --quiet refs/remotes/origin/final; then
-    git -C "$GEM5_DIR" checkout -B final origin/final
-else
-    echo "Error: gem5 final branch not found." >&2
-    exit 1
-fi
+while read -r _ submodule_path; do
+    ensure_submodule_checkout "$submodule_path"
+done < <(git -C "$ROOT_DIR" config --file .gitmodules --get-regexp path)
 
 echo "Preparing local dataset directories..."
 mkdir -p "$EXPORT_ROOT/ivf_matching" "$EXPORT_ROOT/kdtree_matching" "$TESTDATA_TARGET"
