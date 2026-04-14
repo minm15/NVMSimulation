@@ -51,5 +51,8 @@ docker build -t nvmsimulation .
 
 After the image is built, start an interactive shell in the container with:
 ```bash
-docker run --rm -it nvmsimulation
+docker run --rm -it \
+  -v "$(pwd):/NVMSimulation" \
+  -w /NVMSimulation \
+  nvmsimulation
 ```

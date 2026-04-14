@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
     libgoogle-perftools-dev \
     python3-dev \
     libboost-all-dev \
+    libhdf5-serial-dev \
     pkg-config \
     python3-tk \
     clang-format-15 \
@@ -25,12 +26,12 @@ RUN update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/cl
         --slave /usr/bin/clang-format-diff clang-format-diff /usr/bin/clang-format-diff-15 \
         --slave /usr/bin/git-clang-format git-clang-format /usr/bin/git-clang-format-15
 
-WORKDIR /opt/NVMSimulation
+WORKDIR /NVMSimulation
 
 COPY . .
 
-RUN rm -rf /opt/NVMSimulation/simulator/gem5/build \
-    && chmod +x /opt/NVMSimulation/setup.sh \
-    && /opt/NVMSimulation/setup.sh
+RUN rm -rf /NVMSimulation/simulator/gem5/build \
+    && chmod +x /NVMSimulation/setup.sh \
+    && /NVMSimulation/setup.sh
 
 CMD ["/bin/bash"]
